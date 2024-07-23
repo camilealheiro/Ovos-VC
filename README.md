@@ -48,7 +48,7 @@ Esse código irá fazer o recorte semi-automático dos ovos em cada imagem PNG.
 ***OBS***
 O código é 90% efetivo, portanto é necessário verificar se o recorte dos ovos foi salvo corretamente, coisas como as seguintes ainda podem acontecer:
 - Identificação de contornos que não são os ovos;
-- Limiarização não funcionar na fileira toda (nesses casos é necessário o recorte manual, por meio do coordenadas.py, do ovo que não foi salvo).
+- Limiarização não funcionar na fileira toda (nesses casos é necessário o recorte manual, por meio do coordenadas.py, do ovo que não foi salvo).   
 ***Ambas as situações acontecem muito pouco***
 
 ### Coordenadas.py
