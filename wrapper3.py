@@ -63,7 +63,9 @@ try:
 
     # Configure the pipeline to stream the depth stream
     # Change this parameters according to the recorded bag file resolution
-    config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 15)
+    config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)
+    # config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 15)
+
 
     # Start streaming from file
     pipeline.start(config)
@@ -83,7 +85,7 @@ try:
     depth_color_frame = colorizer.colorize(depth_frames)
 
     # Convert depth_frame to numpy array to render image in opencv
-    depth_image = np.asarray(depth_frames.get_data(), dtype=np.uint16)
+    depth_image = np.asarray(depth_frames.get_data(), dtype=np.uint32)
     #cv2.imwrite("dept.png", depth_image)
 
     norm = []
@@ -99,14 +101,19 @@ try:
 
         return norm
     
+    
+    import imageio
 
-    IMAGE_WIDTH = 640
-    IMAGE_HEIGHT = 480
+    #Mudar de acordo com a resolução do vídeo
+    IMAGE_WIDTH = 1280
+    IMAGE_HEIGHT = 720
+    # IMAGE_WIDTH = 640
+    # IMAGE_HEIGHT = 480
     framesize = IMAGE_WIDTH * IMAGE_HEIGHT
     
     teste = []
-    for y in range(480):
-        for x in range(640):
+    for y in range(IMAGE_HEIGHT):
+        for x in range(IMAGE_WIDTH):
             valor = get_depth_at_pixel(depth_frame=depth_frames, pixel_x=x, pixel_y=y)
 
             if valor > 3:
@@ -117,50 +124,15 @@ try:
 
     array = np.asanyarray(teste, dtype=np.double)
     array *= 10000
+    print(array.dtype)
     array16 = array.astype(np.uint16)
 
     
     reshape = np.reshape(array16, (IMAGE_HEIGHT, IMAGE_WIDTH))
     
 
-    cv2.imwrite("multi3000.png", reshape)
-    #print(teste)
-    #print(reshape)
-
-    # # Streaming loop
-    # while True:
-    #     # Get frameset of depth
-    #     frames = pipeline.wait_for_frames()
-
-    #     # Get depth frame
-    #     depth_frame = frames.get_depth_frame()
-
-    #     # Colorize depth frame to jet colormap
-    #     depth_color_frame = colorizer.colorize(depth_frame)
-
-    #     # Convert depth_frame to numpy array to render image in opencv
-    #     depth_color_image = np.asanyarray(depth_color_frame.get_data())
-    #     #depth_image = np.asarray(depth_frame.get_data(), dtype=np.uint16)
-
-    #     #valor = get_depth_at_pixel(depth_frame=depth_frame, pixel_x=110, pixel_y=100)
-    #     #print(valor)
-
-    #     #depth_color_image_16bits = np.array(depth_frame, dtype=np.uint16)
-    #     #depth_color_image_16bits *= 256
-
-    #     #resized = cv2.resize(depth_color_image_16bits, (640, 480), interpolation=cv2.INTER_AREA)
-    #     #cv2.imwrite("depth.png", depth_image)
-
-    #     # Render image in opencv window
-    #     cv2.imshow("Depth Stream", depth_color_image)
-    #     key = cv2.waitKey(1)
-
-    #     # if pressed escape exit program
-
-    #     if key == 27:
-    #         cv2.destroyAllWindows()
-    #         break
-
+    cv2.imwrite("Foto14.png", reshape)
+    
 
 finally:
     pass
